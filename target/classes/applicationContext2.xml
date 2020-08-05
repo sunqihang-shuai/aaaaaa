@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+<context:component-scan base-package="com.fh.sqh.test"></context:component-scan>
+
+
+    <bean id="user" class="com.fh.sqh.test.model.User" scope="singleton">
+        <!-- 属性注入   set方法  -->
+        <property name="id" value="1"></property>
+        <property name="name" value="张三"></property>
+    </bean>
+
+
+    <bean id="user2" class="com.fh.sqh.test.model.User2">
+        <!-- 构造注入-->
+        <constructor-arg index="0" value="12"></constructor-arg>
+        <constructor-arg index="1" value="李四"></constructor-arg>
+    </bean>
+
+
+
+    <!-- 增强类  新增的业务处理-->
+    <bean id="Method" class="com.fh.sqh.test.AOP.Method"></bean>
+    <!-- aop的配置-->
+    <aop:config>
+        <!--切点    -->
+        <aop:pointcut id="cut" expression="execution(* com.fh.sqh.test.AOP.Dog.hit())"></aop:pointcut>
+        <!-- 切面-->
+        <aop:aspect ref="Method">
+            <aop:around method="around" pointcut-ref="cut"></aop:around>
+        </aop:aspect>
+    </aop:config>
+
+    <!--开启aop的注解-->
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+</beans>
